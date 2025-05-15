@@ -1,41 +1,62 @@
-from fastapi import APIRouter, UploadFile, File, Form
+import json
+from fastapi import APIRouter, UploadFile, File, Form, Request
 from typing import List, Optional
 from uuid import UUID
-from app.models.process import ProcessResponse
 from datetime import datetime
-from app.services.ocr_service import OCRService
-from app.agents.summarizer import Summarizer
 
-router = APIRouter(prefix="/api", tags=["Processamento de Currículos"])
+from app.agents.recruiter_qa_agent import RecruiterQAAgent
+from app.agents.curriculum_summarizer_agent import CurriculumSummarizerAgent
+from app.models.chat import ChatOutput
+from app.models.log import Log
+from app.models.process import FileSummary, ProcessResponse
+from app.repository.log_repository import save_log
+from app.services.ocr_service import OCRService
+
+router = APIRouter(prefix="/api", tags=["Processamento de currículos"])
 
 @router.post("/process", response_model=ProcessResponse)
 async def process_documents(
+    request: Request,
     files: List[UploadFile] = File(...),
     query: Optional[str] = Form(None),
     request_id: UUID = Form(...),
     user_id: str = Form(...)
 ):
-    summarizers_files = []
+    file_summaries: List[FileSummary] = []
 
     for file in files:
-        contents = await file.read()
-        text = OCRService.extract_text(contents, file.filename)
-        summary = Summarizer.summarize(text)
-        summarizers_files.append({
-            "filename": file.filename,
-            "summary": summary
-        })
+        file_content = await file.read()
+        extracted_text = OCRService.extract_text(file_content, file.filename)
+        summary = CurriculumSummarizerAgent.run(extracted_text)
+        file_summaries.append(
+            FileSummary(
+                filename=file.filename,
+                summary=summary
+            )
+        )
 
-    results = []
     if query:
-        results.append("Query response LLM")
+        summaries = [fs.summary for fs in file_summaries]
+        content = RecruiterQAAgent.run(query, summaries)
+        result = ChatOutput(content=content)
     else:
-        results=summarizers_files
+        result = file_summaries
+
+    db = request.app.state.db
+    await save_log(
+        db=db,
+        log=Log(
+            query=query,
+            request_id=request_id,
+            user_id=user_id,
+            resultado=json.dumps(result)
+        )
+    )
 
     return ProcessResponse(
         request_id=request_id,
         user_id=user_id,
         timestamp=datetime.now(),
         query=query,
-        result=results,
+        result=result,
     )
