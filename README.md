@@ -19,6 +19,9 @@ Uma API inteligente que permite o envio de múltiplos currículos (PDF ou imagem
 - **Pydantic**
 - **Tesseract**
 - **Hugging Face Transformers**
+- **PyTorch**
+- **Pillow**
+- **Alibaba - Qwen3 Model**
 - **MongoDB (NoSQL para logs)**
 - **Docker & Docker Compose**
 
@@ -38,7 +41,7 @@ Uma API inteligente que permite o envio de múltiplos currículos (PDF ou imagem
 {
   "request_id": "123e4567-e89b-12d3-a456-426614174000",
   "user_id": "fabio.techmatch",
-  "query": "Quais currículos se encaixam para engenheiro de software com React e Python?"
+  "query": "Qual currículo mais se encaixa para engenheiro de software com React e Python?"
 }
 ```
 
@@ -49,7 +52,9 @@ Uma API inteligente que permite o envio de múltiplos currículos (PDF ou imagem
   "user_id": "fabio.techmatch",
   "timestamp": "2025-05-13T01:39:38.721247",
   "query": "Quais currículos se encaixam para engenheiro de software com React e Python?",
-  "result": "O currículo de João Silva corresponde à vaga por ter experiência com React e Python."
+  "result": {
+    "content": "O currículo de João Silva corresponde à vaga por ter experiência com React e Python."
+  }
 }
 ```
 
@@ -62,11 +67,11 @@ Uma API inteligente que permite o envio de múltiplos currículos (PDF ou imagem
   "result": [
     {
       "filename": "curriculo1.pdf",
-      "summary": "Desenvolvedor backend experiente com Python e Django."
+      "summary": "Fulano: Desenvolvedor backend experiente com Python e Django."
     },
     {
       "filename": "curriculo2.jpg",
-      "summary": "Desenvolvedor frontend com experiência em React e TypeScript."
+      "summary": "Ciclano: Desenvolvedor frontend com experiência em React e TypeScript."
     }
   ]
 }
