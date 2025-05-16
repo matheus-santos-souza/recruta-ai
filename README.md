@@ -10,7 +10,7 @@ Uma API inteligente que permite o envio de múltiplos currículos (PDF ou imagem
 - 📝 Retorno com justificativas e resultados relevantes
 - 📦 Dockerizado para fácil execução
 - 📚 Documentação interativa via Swagger
-- 🗂️ Log de uso (sem armazenar arquivos) em banco NoSQL
+- 🗂️ Log de uso em banco NoSQL
 
 ## Tecnologias
 
@@ -31,10 +31,10 @@ Uma API inteligente que permite o envio de múltiplos currículos (PDF ou imagem
 
 | Campo        | Tipo              | Obrigatório | Descrição                                  |
 |--------------|-------------------|-------------|--------------------------------------------|
-| files        | Lista de arquivos | ✅           | Currículos em PDF ou imagem               |
-| query        | String            | ❌           | Pergunta opcional para filtrar currículos |
-| request_id   | String              | ✅           | ID único da requisição                    |
-| user_id      | String            | ✅           | Identificador do solicitante              |
+| files        | Lista de arquivos | ✅          | Currículos em PDF ou imagem                |
+| query        | String            | ❌          | Pergunta opcional para filtrar currículos  |
+| request_id   | String            | ✅          | ID único da requisição                     |
+| user_id      | String            | ✅          | Identificador do solicitante               |
 
 ### Exemplo de Requisição (com query)
 ```json
