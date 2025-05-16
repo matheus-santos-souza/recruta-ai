@@ -12,4 +12,5 @@ class OCRService:
         else:
             image = Image.open(io.BytesIO(file_bytes))
             text = pytesseract.image_to_string(image)
+        print("text ocr: ", text)
         return text

@@ -1,7 +1,6 @@
-
 from typing import List
 from app.models.chat import Chat, Role
-from app.providers.qwen.qwen_chat_model import QwenChatModel
+from app.providers.alibaba.qwen_chat_model import QwenChatModel
 
 PROMPT_RECRUITER_QA = """
 Você é um agente de recrutamento especializado em analisar currículos e responder perguntas sobre candidatos. 
@@ -23,5 +22,5 @@ class RecruiterQAAgent:
             Chat(role=Role.system, content=prompt),
             Chat(role=Role.user, content=text)
         ]
-        response = QwenChat.run(chat_history)
+        response = QwenChat.run(chat_history, enable_thinking=True)
         return response.content

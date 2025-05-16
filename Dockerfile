@@ -10,11 +10,12 @@ RUN apt-get update && \
 WORKDIR /app
 
 # Copia os arquivos
-COPY . /app
+COPY ./app /app
+COPY requirements.txt .
 
 # Instala dependências do Python
 RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Expondo a porta do FastAPI
 EXPOSE 8000

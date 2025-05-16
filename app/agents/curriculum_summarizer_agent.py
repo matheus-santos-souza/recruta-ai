@@ -1,10 +1,11 @@
 from app.models.chat import Chat, Role
-from app.providers.qwen.qwen_chat_model import QwenChatModel
-
+from app.providers.alibaba.qwen_chat_model import QwenChatModel
 
 PROMPT_SUMMARIZE_CURRICULUM = """
-Resuma o currículo abaixo de forma clara, objetiva e concisa, destacando as principais experiências profissionais, habilidades e formações relevantes. O resumo deve ser fácil de entender e focado nos pontos mais importantes do perfil apresentado.
-Retorne apenas o resumo, sem incluir informações adicionais ou explicações.
+Resuma o currículo do profissional de forma clara, objetiva e concisa, destacando seu nome, 
+principais experiências profissionais, habilidades e formações relevantes. 
+O resumo deve ser direto, fácil de entender e focado nos pontos mais importantes do perfil apresentado. 
+Retorne apenas o resumo, sem incluir explicações ou informações adicionais.
 """
 
 class CurriculumSummarizerAgent:
@@ -15,5 +16,5 @@ class CurriculumSummarizerAgent:
             Chat(role=Role.system, content=PROMPT_SUMMARIZE_CURRICULUM),
             Chat(role=Role.user, content=text)
         ]
-        response = QwenChat.run(chat_history)
+        response = QwenChat.run(chat_history, True)
         return response.content
